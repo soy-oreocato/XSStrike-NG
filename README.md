@@ -28,7 +28,12 @@ To install the plugin, follow these steps:
 
 ![install_1](./install_1.png)
 
-2. Install the plugin in BurpSuite:
+2. Download this repo
+```shell
+git clone https://github.com/soy-oreocato/XSStrike-NG.git
+```
+
+3. Install the plugin file (XSStrike-NG.py) in BurpSuite :
 
 ![install_2](./install_2.png)
 
