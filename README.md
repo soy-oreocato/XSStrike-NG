@@ -1,20 +1,25 @@
 # XSSStrike-NG
 
-## Description
+## Vision
 
-**XSSStrike-NG** is a BurpSuite plugin that facilitates the rapid and intense identification of Cross-Site Scripting (XSS) vulnerabilities.
-
-This plugin assists the pentester by automating certain tasks to provide a quick overview of XSS exploitability.
+**XSSStrike-NG** is a BurpSuite plugin that facilitates a quick and intense identification of Cross-Site Scripting (XSS) vulnerabilities. This plugin assists the pentester by automating certain tasks to provide a quick overview of XSS exploitability.
 
 ## Features
 
 ### DOM-XSS
+
 - Static analysis in passive mode
 
 ### REFLECTED-XSS
-**EntryPoints Identification**: In active mode, it searches for potential injection points in HTTP requests.
 
-**Context Identification**: Uses context-based payloads for the injection.
+- **EntryPoints Identification**: In active mode, it searches for potential injection points in HTTP requests.
+
+- **Context Identification**: Identifies the context in which the injection was executed. The contexts identified so far are: 
+        HTML: `<div>XsStRIke</div>`
+        Attribute HTML: `<img src="XsStRIke" alt="XsStRIke">`
+        Event HTML: `<button onclick="alert('XsStRIke')">Click me</button>`
+        CSS: `<style>body {background-image: url('XsStRIke');}</style>`
+        JavaScript: `<script>var data = "XsStRIke";</script>`
 
 ## Requirements
 
@@ -45,12 +50,28 @@ To use the plugin, follow these steps:
 
 ![usage_1](./uso_1.png)
 
-## Contributions
+
+## Future Work
+
+Improve the process in any of the following stages:
+![Uncle Rat Method](./uncle_rat_method.png)
+**Source**: [XSS Rat Notion](https://thexssrat.notion.site/XSS-0ad0878f33094ea6b8ac90e94c2b0dc2)
+
+
+## How to Contribute
+
 - Suggest a feature
 
 - Report a bug
 
 - Fix something and open a pull request
+
+## Acknowledgments
+
+[Alaeddine Mesbahi](https://twitter.com/3asm_) for his inspiring article: [Finding superhuman XSS polyglot payloads with Genetic Algorithms](https://blog.ostorlab.co/polyglot-xss.html)
+
+[Uncle Rat](https://x.com/theXSSrat) for his valuable tutorials that helped to better understand this vulnerability.
+
 
 ## License
 
