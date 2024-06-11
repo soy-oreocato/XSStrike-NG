@@ -2,10 +2,12 @@
 from burp import IBurpExtender, IScannerCheck, IScanIssue
 
 from modes.scan import scanDOM
+from core.myutils import convert_to_html_entities
+from core.context import detect_context
 
 class BurpExtender(IBurpExtender):
     def registerExtenderCallbacks(self, callbacks):
-        print("XSStrike-NG V2.3")
+        print("XSStrike-NG V2.5")
         callbacks.registerScannerCheck(ScanCheck(callbacks))
 
 
@@ -93,20 +95,25 @@ class ScanCheck(IScannerCheck):
                 print("[Active/Reflected] Entrypoint No reflected")
         else:
             print("No response received.")  
+    
+        ##############################
+        ## Step 2. Detect Context
+        ##############################
+        if insertion_point_reflected:
+            contexto = detect_context (response_body, reflection_word)
+            print("Contextos identificados: ", contexto)
 
         ##############################
         ## Step 5. Test Polyglot Payloads
         ##############################
         payload_inserted = False 
         if insertion_point_reflected:
-            # Obtain payloads from a file
-            with open('payloads/xsstrike-waf-bypass.txt', 'r') as archivo:
-                payloads = archivo.readlines()
-
-            print("[Active/Reflected] Trying payloads basicas...")
+            # Obtain payloads from a file based on the context            
+            payloads = self.readPayloadsFromFile(contexto)
 
             for payload in payloads:
-                new_request = insertionPoint.buildRequest(payload+reflection_word)
+                salted_payload = payload.strip() + reflection_word # Just For easy tracking in Logger
+                new_request = insertionPoint.buildRequest(salted_payload)
                 attack_payload = self.callbacks.makeHttpRequest(baseRequestResponse.getHttpService(), new_request)
                 response = attack_payload.getResponse()
 
@@ -115,14 +122,15 @@ class ScanCheck(IScannerCheck):
                     response_info = self.helpers.analyzeResponse(response)
                     response_body = response[response_info.getBodyOffset():].tostring()
                     #response_headers = response_info.getHeaders()
-                    if payload in response_body:
+                    if salted_payload in response_body:
                         payload_inserted = True
-                        payload_reflected = payload
-                        print("[Active/Reflected] Payload reflected: " + payload)
+                        payload_reflected = salted_payload
+                        print("[Active/Reflected] Payload reflected: " + salted_payload)
                         break
             
             if not payload_reflected:
                 print("[Active/Reflected] All payloads were tested")
+
 
         #############################
         # Alarm based on results
@@ -130,12 +138,13 @@ class ScanCheck(IScannerCheck):
 
         if payload_inserted:
             httpRequested = self.helpers.analyzeRequest(attack_payload.getHttpService(), attack.getRequest())
+            sanitized_payload_reflected = convert_to_html_entities(salted_payload)
             alerta = CustomIssue(
                 httpRequested.getUrl(),
                 attack_payload.getHttpService(),
                 [self.callbacks.applyMarkers(attack_payload, None, None)],
                 "[XSStrike-NG]Reflected-XSS",
-                "An EntryPoint was reflected and no filter were detected.<br><br>EntryPoint Name: " + insertion_point_name + " ,Payload: " + payload_reflected, 
+                "An EntryPoint was reflected and no filter were detected.<br><br>EntryPoint Name: <b>" + insertion_point_name + " </b>,Payload: <b>" + salted_payload, 
                 "High",
                 "Certain")
         elif insertion_point_reflected:     
@@ -145,13 +154,50 @@ class ScanCheck(IScannerCheck):
                 attack.getHttpService(),
                 [self.callbacks.applyMarkers(attack, None, None)],
                 "[XSStrike-NG]EntryPoint Reflected",
-                "An EntryPoint was reflected in the body.<br><br>EntryPoint Name: " + insertion_point_name + " ,Original Value: " + insertion_point_base_value + " ,Reflected word: " + reflection_word, 
+                "An EntryPoint was reflected in the body but Filtered.<br><br>EntryPoint Name: " + insertion_point_name + " ,Original Value: " + insertion_point_base_value + " ,Reflected word: " + reflection_word, 
                 "Information",
                 "Certain")         
         else:
             alerta = None
         
         return [alerta]
+
+    # Gets payloads from files
+    def readPayloadsFromFile(self, contexto):
+            
+        payload_files = {
+            "HTML_file": "payloads/context-html-20.txt",
+            "Attribute_file": "payloads/context-attribute-html-20.txt",
+            "Event_file": "payloads/context-html-event-20.txt",
+            "CSS_file": "payloads/context-css-20.txt",
+            "JavaScript_file": "payloads/context-javascript-20.txt",
+            "Polyglot-20-file": "payloads/generic-polyglot-50.txt",
+            "Polyglot-50-file": "payloads/generic-polyglot-50.txt",
+            "xsstrike-file": "payloads/xsstrike-waf-bypass.txt",
+            }
+                    
+        if "JavaScript" in contexto: 
+            filename = "JavaScript_file"
+            print("[Active/Reflected] Trying JavaScript context payloads...")
+        elif "Attribute" in contexto: 
+            filename = "Attribute_file"
+            print("[Active/Reflected] Trying Attribute HTMl context payloads...")
+        elif "Event" in contexto: 
+            filename = "Event_file"
+            print("[Active/Reflected] Trying Event HTML context payloads...")
+        elif "CSS" in contexto: 
+            filename = "CSS_file"
+            print("[Active/Reflected] Trying CSS context payloads...")
+        elif "HTML" in contexto: 
+            filename = "HTML_file"
+            print("[Active/Reflected] Trying HTML Tag context payloads...")
+        else:
+            filename = "Polyglot-20-file"
+            print("[Active/Reflected] Trying Polyglot, No context...")      
+
+        with open(payload_files[filename], 'r') as archivo:
+            payloads = archivo.readlines()
+        return payloads
 
     # Delete duplicate Issues
     def consolidateDuplicateIssues(self, existing, new):

