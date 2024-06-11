@@ -16,9 +16,9 @@
 
 - **Context Identification**: Identifies the context in which the injection was executed. The contexts identified so far are: 
 	- HTML: `<div>XsStRIke</div>`
-        - Attribute HTML: `<img src="XsStRIke" alt="XsStRIke">`
-        - Event HTML: `<button onclick="alert('XsStRIke')">Click me</button>`
-        - CSS: `<style>body {background-image: url('XsStRIke');}</style>`
+	- Attribute HTML: `<img src="XsStRIke" alt="XsStRIke">`
+	- Event HTML: `<button onclick="alert('XsStRIke')">Click me</button>`
+	- CSS: `<style>body {background-image: url('XsStRIke');}</style>`
 	- JavaScript: `<script>var data = "XsStRIke";</script>`
 
 ## Requirements
