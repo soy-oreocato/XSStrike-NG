@@ -6,20 +6,20 @@
 
 ## Features
 
-### DOM-XSS
+### Dom-XSS
 
 - Static analysis in passive mode
 
-### REFLECTED-XSS
+### Reflected-XSS
 
 - **EntryPoints Identification**: In active mode, it searches for potential injection points in HTTP requests.
 
 - **Context Identification**: Identifies the context in which the injection was executed. The contexts identified so far are: 
-        HTML: `<div>XsStRIke</div>`
-        Attribute HTML: `<img src="XsStRIke" alt="XsStRIke">`
-        Event HTML: `<button onclick="alert('XsStRIke')">Click me</button>`
-        CSS: `<style>body {background-image: url('XsStRIke');}</style>`
-        JavaScript: `<script>var data = "XsStRIke";</script>`
+	- HTML: `<div>XsStRIke</div>`
+        - Attribute HTML: `<img src="XsStRIke" alt="XsStRIke">`
+        - Event HTML: `<button onclick="alert('XsStRIke')">Click me</button>`
+        - CSS: `<style>body {background-image: url('XsStRIke');}</style>`
+	- JavaScript: `<script>var data = "XsStRIke";</script>`
 
 ## Requirements
 
