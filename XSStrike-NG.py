@@ -2,19 +2,22 @@
 from burp import IBurpExtender, IScannerCheck, IScanIssue
 
 from modes.scan import scanDOM
-from core.myutils import convert_to_html_entities
 from core.context import detect_context
+from core.myutils import convert_to_html_entities
+from core.payloadPolyglot import algoritmo_genetico
+
 
 class BurpExtender(IBurpExtender):
     def registerExtenderCallbacks(self, callbacks):
-        print("XSStrike-NG V2.5")
+        print("XSStrike-NG V2.6\n")
+        
         callbacks.registerScannerCheck(ScanCheck(callbacks))
-
 
 class ScanCheck(IScannerCheck):
     def __init__(self, callbacks):
         self.callbacks = callbacks
         self.helpers = callbacks.getHelpers()
+        self.payload_polyglot_genetic = algoritmo_genetico(tamano_poblacion=10, longitud_individuo=6)
 
     def doPassiveScan(self, baseRequestResponse):
         self.callbacks.printOutput("[ ]Passive Scanning...")
@@ -104,12 +107,16 @@ class ScanCheck(IScannerCheck):
             print("Contextos identificados: ", contexto)
 
         ##############################
-        ## Step 5. Test Polyglot Payloads
+        ## Step 5. Test Polyglot Payloads and context-based
         ##############################
         payload_inserted = False 
         if insertion_point_reflected:
-            # Obtain payloads from a file based on the context            
+
+            # Obtain payloads from a file based on the context 
             payloads = self.readPayloadsFromFile(contexto)
+            
+            # Add the Polyglot Payload generated with genetic algorithms
+            payloads.insert(0, self.payload_polyglot_genetic)
 
             for payload in payloads:
                 salted_payload = payload.strip() + reflection_word # Just For easy tracking in Logger
